@@ -230,10 +230,24 @@ function buildResult() {
       <div class="product-grid">${productCards(concerns,budget)}</div>${affiliateDisclosure(concerns,budget)}<p class="product-lead product-price-note">Prices and availability can change.</p></section>
       <div class="focus-card"><h3>A note for your routine</h3><p>${escapeHtml(focus)}${climate==='Cold or windy'?' In cold or windy weather, a richer moisturizer and protective clothing can help reduce dryness.':''}${climate==='Hot and humid'?' In heat and humidity, reapply sunscreen as directed, especially after sweating or swimming.':''}${lifestyle.length?' '+lifestyle.join(' '):''}</p></div>
       <p class="disclaimer">This guide offers general skincare education, not medical advice. Skin needs vary. Introduce one product at a time and patch test. For acne products during pregnancy, check with an obstetrician or dermatologist first. If you have a persistent rash, severe irritation, painful acne, or a changing skin lesion, talk with a qualified healthcare professional. If you have a known allergy or ingredient restriction, check product labels carefully. For more, see <a href="https://www.aad.org/public/everyday-care/skin-care-secrets/prevent-skin-problems/test-skin-care-products/" target="_blank" rel="noopener noreferrer">AAD advice on testing products</a> and <a href="https://www.aad.org/public/diseases/acne/derm-treat/pregnancy" target="_blank" rel="noopener noreferrer">acne treatment during pregnancy</a>. Your answers are only used in this page and are not transmitted.</p>
-      <div class="result-actions"><button class="btn" id="print">Save or print my guide</button><button class="btn secondary" id="restart">Start over</button></div>`;
+      <div class="result-actions"><button class="btn" id="print">Save or print my guide</button><button class="btn secondary" id="email">Email my results</button><button class="btn secondary" id="restart">Start over</button></div><p class="email-note">Your email app will open with a draft you can review and send. Modern Skin doesn’t send or store it.</p>`;
     document.getElementById('quiz').style.display = 'none';
     res.classList.add('show');
     document.getElementById('print').onclick = () => window.print();
+    document.getElementById('email').onclick = () => {
+        const emailCopy = res.cloneNode(true);
+        emailCopy.querySelector('.result-actions')?.remove();
+        emailCopy.querySelector('.email-note')?.remove();
+        emailCopy.querySelectorAll('a').forEach(link => link.insertAdjacentText('beforeend', ' (' + link.href + ')'));
+        emailCopy.style.position = 'fixed';
+        emailCopy.style.left = '-10000px';
+        emailCopy.style.display = 'block';
+        document.body.append(emailCopy);
+        const body = 'Hi,\n\n' + emailCopy.innerText.trim() + '\n\nCreated with Modern Skin.';
+        emailCopy.remove();
+        const subject = 'My Modern Skin guide';
+        window.location.href = 'mailto:?subject=' + encodeURIComponent(subject) + '&body=' + encodeURIComponent(body);
+    };
     document.getElementById('restart').onclick = () => { document.querySelectorAll('input').forEach(x => { if (x.type === 'checkbox' || x.type === 'radio') x.checked = false;
             else x.value = '' });
         document.querySelectorAll('select').forEach(x => x.selectedIndex = 0);
