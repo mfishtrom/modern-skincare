@@ -623,3 +623,17 @@ button {
     font-size: 11px;
     margin-top: 10px;
 }
+
+
+.email-note {
+    margin: 8px 2px 0;
+    color: var(--muted);
+    font-size: 11px;
+    line-height: 1.5;
+}
+
+@media print {
+    .email-note {
+        display: none !important;
+    }
+}
